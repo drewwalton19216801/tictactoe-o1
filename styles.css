@@ -9,79 +9,90 @@ body {
 }
 
 .game {
-    margin: 50px auto;
-    width: 320px;
+    margin: 20px auto;
+    max-width: 90%;
 }
 
 h1 {
-    font-size: 3em;
+    font-size: 2.5em;
     margin-bottom: 20px;
 }
 
 .scoreboard {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-around;
     margin-bottom: 20px;
 }
 
 .player-score h2 {
     font-size: 1.2em;
+    margin: 10px 0;
 }
 
 /* Board Styles */
 .board {
     display: grid;
-    grid-template-columns: repeat(3, 100px);
-    grid-gap: 10px;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 5px;
     justify-content: center;
+    max-width: 400px;
+    margin: 0 auto;
 }
 
 .square {
     background-color: #34495e;
-    width: 100px;
-    height: 100px;
-    /* Removed font-size: 0; */
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    aspect-ratio: 1 / 1; /* Maintains square shape */
     cursor: pointer;
     transition:
         background-color 0.3s ease,
         transform 0.3s ease,
         opacity 0.3s ease;
+    display: flex; /* Centers content */
+    align-items: center;
+    justify-content: center;
     position: relative;
-    overflow: hidden;
 }
 
 .square:hover {
     background-color: #3d566e;
-    transform: scale(1.05);
+    transform: scale(1.02);
 }
 
-/* Animations for Player Marks */
-.square.x::after,
-.square.o::after {
-    content: attr(data-player);
-    /* Removed color: transparent; */
-    font-size: 5em; /* This now works correctly */
-    position: absolute;
+.mark {
+    font-size: 2em;
+    line-height: 1;
+    color: inherit;
+}
+
+.pop {
     animation: pop 0.3s forwards;
-    transform: translate(-50%, -50%) scale(0);
-    top: 50%;
-    left: 50%;
-}
-
-.square.x::after {
-    color: #e74c3c;
-}
-
-.square.o::after {
-    color: #3498db;
 }
 
 @keyframes pop {
+    from {
+        transform: scale(0);
+    }
     to {
-        transform: translate(-50%, -50%) scale(1);
+        transform: scale(1);
+    }
+}
+
+/* Highlight Winning Squares */
+.square.winner {
+    background-color: #f1c40f;
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 10px #f1c40f;
+    }
+    50% {
+        box-shadow: 0 0 20px #f1c40f;
+    }
+    100% {
+        box-shadow: 0 0 10px #f1c40f;
     }
 }
 
@@ -102,20 +113,26 @@ button:hover {
     transform: scale(1.05);
 }
 
-/* Highlight Winning Squares */
-.square.winner {
-    background-color: #f1c40f; /* Gold color */
-    animation: pulse 1s infinite;
-}
+/* Responsive Styles */
+@media (min-width: 600px) {
+    .game {
+        max-width: 500px;
+    }
 
-@keyframes pulse {
-    0% {
-        box-shadow: 0 0 10px #f1c40f;
+    h1 {
+        font-size: 3em;
     }
-    50% {
-        box-shadow: 0 0 20px #f1c40f;
+
+    .board {
+        max-width: 500px;
+        grid-gap: 10px;
     }
-    100% {
-        box-shadow: 0 0 10px #f1c40f;
+
+    .square:hover {
+        transform: scale(1.05);
+    }
+
+    .mark {
+        font-size: 9em;
     }
 }

@@ -22,13 +22,17 @@ document.addEventListener('DOMContentLoaded', () => {
             square.setAttribute('data-index', i);
             square.addEventListener('click', handleSquareClick);
 
+            const mark = document.createElement('div');
+            mark.classList.add('mark');
+            square.appendChild(mark);
+
             if (animated) {
                 square.style.opacity = '0';
                 square.style.transform = 'scale(0)';
                 setTimeout(() => {
                     square.style.opacity = '1';
                     square.style.transform = 'scale(1)';
-                }, i * 50); // Staggered animation
+                }, i * 50);
             }
 
             board.appendChild(square);
@@ -40,18 +44,18 @@ document.addEventListener('DOMContentLoaded', () => {
         const index = squareEl.getAttribute('data-index');
         if (!squares[index] && isGameActive) {
             squares[index] = currentPlayer;
-            squareEl.classList.add(currentPlayer.toLowerCase());
-            squareEl.setAttribute('data-player', currentPlayer);
-            
-            const winningCondition = checkWin();
-            if (winningCondition) {
+            const markEl = squareEl.querySelector('.mark');
+            markEl.textContent = currentPlayer;
+            markEl.style.color = currentPlayer === 'X' ? '#e74c3c' : '#3498db';
+            markEl.classList.add('pop');
+            if (checkWin()) {
                 isGameActive = false;
                 updateScore();
-                highlightWinningSquares(winningCondition);
+                highlightWinningSquares(checkWin());
                 setTimeout(() => {
                     alert(`Player ${currentPlayer} wins!`);
                     createBoard(true);
-                }, 2500); // Wait for 2.5 seconds
+                }, 2500);
             } else if (squares.every(square => square)) {
                 isGameActive = false;
                 setTimeout(() => {
