@@ -43,18 +43,16 @@ h1 {
 .square {
     background-color: #34495e;
     width: 100%;
-    padding-bottom: 100%; /* Makes the square responsive */
-    position: relative;
-    font-size: 0; /* Hide any direct text */
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    padding-bottom: 100%; /* Keeps the square aspect ratio */
     cursor: pointer;
     transition:
         background-color 0.3s ease,
         transform 0.3s ease,
         opacity 0.3s ease;
-    overflow: hidden;
+    display: flex; /* Use flexbox for centering */
+    align-items: center;
+    justify-content: center;
+    position: relative; /* Needed for animations and pseudo-elements */
 }
 
 .square:hover {
@@ -66,12 +64,11 @@ h1 {
 .square.x::after,
 .square.o::after {
     content: attr(data-player);
-    font-size: 5em;
-    position: absolute;
+    font-size: 5vw; /* Font size responsive to viewport width */
+    line-height: 1;
+    color: transparent;
     animation: pop 0.3s forwards;
-    transform: translate(-50%, -50%) scale(0);
-    top: 50%;
-    left: 50%;
+    transform: scale(0);
 }
 
 .square.x::after {
@@ -84,7 +81,25 @@ h1 {
 
 @keyframes pop {
     to {
-        transform: translate(-50%, -50%) scale(1);
+        transform: scale(1);
+    }
+}
+
+/* Highlight Winning Squares */
+.square.winner {
+    background-color: #f1c40f; /* Gold color */
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 10px #f1c40f;
+    }
+    50% {
+        box-shadow: 0 0 20px #f1c40f;
+    }
+    100% {
+        box-shadow: 0 0 10px #f1c40f;
     }
 }
 
