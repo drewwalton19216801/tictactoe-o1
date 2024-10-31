@@ -42,13 +42,16 @@ document.addEventListener('DOMContentLoaded', () => {
             squares[index] = currentPlayer;
             squareEl.classList.add(currentPlayer.toLowerCase());
             squareEl.setAttribute('data-player', currentPlayer);
-            if (checkWin()) {
+            
+            const winningCondition = checkWin();
+            if (winningCondition) {
                 isGameActive = false;
                 updateScore();
+                highlightWinningSquares(winningCondition);
                 setTimeout(() => {
                     alert(`Player ${currentPlayer} wins!`);
                     createBoard(true);
-                }, 500);
+                }, 2500); // Wait for 2.5 seconds
             } else if (squares.every(square => square)) {
                 isGameActive = false;
                 setTimeout(() => {
@@ -67,8 +70,19 @@ document.addEventListener('DOMContentLoaded', () => {
             [0,3,6],[1,4,7],[2,5,8], // columns
             [0,4,8],[2,4,6]          // diagonals
         ];
-        return winConditions.some(condition => {
-            return condition.every(index => squares[index] === currentPlayer);
+        for (let condition of winConditions) {
+            const [a, b, c] = condition;
+            if (squares[a] === currentPlayer && squares[b] === currentPlayer && squares[c] === currentPlayer) {
+                return condition; // Return the winning indices
+            }
+        }
+        return null; // No win
+    }
+
+    function highlightWinningSquares(indices) {
+        indices.forEach(index => {
+            const squareEl = document.querySelector(`.square[data-index='${index}']`);
+            squareEl.classList.add('winner');
         });
     }
 
